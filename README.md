@@ -8,7 +8,7 @@ EasyImagePicker allow us to pick image from camera or gallery without creating a
 
 1. Runtime Permissions for camera and Gallery built in
 2. Camera Integration
-3. Lees line of code to implement this 
+3. Less line of code to implement this 
 4. File Provider
 5. Custom Picker Dialog 
 6. Dialog animations
