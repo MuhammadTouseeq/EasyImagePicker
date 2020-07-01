@@ -1,0 +1,3 @@
+include ':easypicker'
+include ':app'
+rootProject.name = "PracticeApp"
