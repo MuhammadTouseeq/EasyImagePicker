@@ -3,6 +3,7 @@ package com.pakdev.easypicker.utils;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -129,16 +130,27 @@ public class ImageUtil {
    * Navigates user to app settings
    * NOTE: Keep proper title and message depending on your app
    */
-  public static void showSettingsDialog(Activity activity) {
+  public static void showSettingsDialog(final Activity activity) {
     AlertDialog.Builder builder = new AlertDialog.Builder(activity);
     builder.setTitle("Need Permissions");
     builder.setMessage(
             "This app needs permission to use this feature. You can grant them in app settings.");
-    builder.setPositiveButton("GOTO SETTINGS", (dialog, which) -> {
-      dialog.cancel();
-      openSettings(activity);
+
+    builder.setPositiveButton("GOTO SETTINGS", new DialogInterface.OnClickListener() {
+      @Override
+      public void onClick(DialogInterface dialogInterface, int i) {
+        dialogInterface.cancel();
+        openSettings(activity);
+      }
     });
-    builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
+    builder.setPositiveButton("Cancel", new DialogInterface.OnClickListener() {
+      @Override
+      public void onClick(DialogInterface dialogInterface, int i) {
+        dialogInterface.cancel();
+        openSettings(activity);
+      }
+    });
+
     builder.show();
   }
   // navigating user to app settings

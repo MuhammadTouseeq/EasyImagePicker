@@ -152,7 +152,6 @@ public class EasyImagePicker {
                         token.continuePermissionRequest();
                     }
                 }).onSameThread()
-                .withErrorListener(error -> Toast.makeText(mContext, "Error occured", Toast.LENGTH_SHORT).show())
                 .check();
     }
 
