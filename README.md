@@ -4,6 +4,18 @@
 
 EasyImagePicker allow us to pick image from camera or gallery without creating a lot of boilerplate code .it support Android 10 version
 
+
+<p align="center">
+:robot: Pull Requests for Hacktoberfest are Welcomed 
+</p>
+
+<br>
+
+<div align="center">
+	<img src="https://raw.githubusercontent.com/androiddevnotes/androiddevnotes/master/assets/hacktoberfest2020.jpg" alt="Hacktoberfest 2020 logo"></img>   
+</div>
+
+
 ## Features built in:
 
 1. Runtime Permissions for camera and Gallery built in
