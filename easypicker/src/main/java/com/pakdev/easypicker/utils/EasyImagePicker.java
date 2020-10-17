@@ -29,9 +29,12 @@ import java.util.List;
 
 public class EasyImagePicker {
 
-
-    public static final int REQUEST_TAKE_PHOTO = 1;
-    public static final int REQUEST_GALLERY_PHOTO = 2;
+enum FILE_TYPE{
+    CAMERA,GALLERY,FILE
+}
+    public static final int REQUEST_TAKE_PHOTO = 111;
+    public static final int REQUEST_GALLERY_PHOTO = 222;
+    public static final int REQUEST_FILE = 777;
     File mPhotoFile;
     FileCompressor mCompressor;
     private Activity mContext;
@@ -53,11 +56,16 @@ public class EasyImagePicker {
         return this;
     }
     public EasyImagePicker openCamera() {
-        requestPermissions(true);
+        requestPermissions(FILE_TYPE.CAMERA);
         return this;
     }
     public EasyImagePicker openGallery() {
-        requestPermissions(false);
+        requestPermissions(FILE_TYPE.GALLERY);
+        return this;
+    }
+
+    public EasyImagePicker openFilePicker() {
+        requestPermissions(FILE_TYPE.FILE);
         return this;
     }
 
@@ -71,7 +79,7 @@ public class EasyImagePicker {
         btnCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                requestPermissions(true);
+                requestPermissions(FILE_TYPE.CAMERA);
                 dialog.dismiss();
 
             }
@@ -80,7 +88,7 @@ public class EasyImagePicker {
         btnGallery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                requestPermissions(false);
+                requestPermissions(FILE_TYPE.GALLERY);
                 dialog.dismiss();
 
             }
@@ -99,10 +107,38 @@ public class EasyImagePicker {
 
     }
 
+
+    private void intentFilPicker()
+    {
+        Intent intent;
+        if (android.os.Build.MANUFACTURER.equalsIgnoreCase("samsung")) {
+            intent = new Intent("com.sec.android.app.myfiles.PICK_DATA");
+            intent.putExtra("CONTENT_TYPE", "*/*");
+            intent.addCategory(Intent.CATEGORY_DEFAULT);
+        } else {
+
+            String[] mimeTypes =
+                    {
+                            "application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document", // .doc & .docx
+                            "application/vnd.ms-powerpoint", "application/vnd.openxmlformats-officedocument.presentationml.presentation", // .ppt & .pptx
+                            "application/vnd.ms-excel", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", // .xls & .xlsx
+                            "text/plain",
+                            "application/pdf",
+                            "application/zip", "application/vnd.android.package-archive"};
+
+            intent = new Intent(Intent.ACTION_GET_CONTENT); // or ACTION_OPEN_DOCUMENT
+            intent.setType("*/*");
+            intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes);
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+            //intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
+        }
+
+        mContext.startActivityForResult(intent,REQUEST_FILE);
+    }
     /**
      * Capture image from camera
      */
-    public void dispatchTakePictureIntent() {
+    private void dispatchTakePictureIntent() {
 
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(mContext.getPackageManager()) != null) {
@@ -125,7 +161,7 @@ public class EasyImagePicker {
         }
     }
 
-    private void requestPermissions(final boolean isCamera) {
+    private void requestPermissions(final FILE_TYPE type) {
         Dexter.withActivity(mContext).withPermissions(Manifest.permission.READ_EXTERNAL_STORAGE,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA)
                 .withListener(new MultiplePermissionsListener() {
@@ -134,10 +170,24 @@ public class EasyImagePicker {
 
                         // check if all permissions are granted
                         if (report.areAllPermissionsGranted()) {
-                            if (isCamera) {
-                                dispatchTakePictureIntent();
-                            } else {
-                                dispatchGalleryIntent();
+
+                            switch (type)
+                            {
+                                case FILE:
+                                {
+                                    intentFilPicker();
+                                }
+                                break;
+                                case GALLERY:
+                                {
+                                    dispatchGalleryIntent();
+                                }
+                                break;
+                                case CAMERA:
+                                {
+                                    dispatchTakePictureIntent();
+                                }
+                                break;
                             }
                         }
                         // check for permanent denial of any permission
@@ -198,6 +248,23 @@ public class EasyImagePicker {
 
             }
             break;
+            case (REQUEST_FILE): {
+
+                if (resultCode == Activity.RESULT_OK) {
+                    Uri selectedImage = data.getData();
+
+
+                  //  mCompressor = new FileCompressor(mContext);
+                    File mPhotoFile = null;
+                        mPhotoFile = new File(ImageUtil.getRealPathFromUri(mContext, selectedImage));
+
+                    if (pickerCallback != null) {
+                        pickerCallback.onMediaFilePicked(mPhotoFile.getAbsolutePath());
+                    }
+
+                }
+            }
+                break;
             case (REQUEST_GALLERY_PHOTO): {
 
 

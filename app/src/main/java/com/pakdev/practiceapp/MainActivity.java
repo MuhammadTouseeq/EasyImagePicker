@@ -47,11 +47,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onMediaFilePicked(String result) {
 
-
-                Glide.with(MainActivity.this).load(Uri.fromFile(new File(result)))
-                        .apply(new RequestOptions().circleCrop())
-                        // .placeholder(drawable)
-                        .into( ((ImageView)findViewById(R.id.img)));
+                Toast.makeText(MainActivity.this, ""+result, Toast.LENGTH_SHORT).show();
+//                Glide.with(MainActivity.this).load(Uri.fromFile(new File(result)))
+//                        .apply(new RequestOptions().circleCrop())
+//                        // .placeholder(drawable)
+//                        .into( ((ImageView)findViewById(R.id.img)));
 
             }
 
