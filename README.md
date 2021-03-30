@@ -14,7 +14,7 @@ EasyImagePicker allow us to pick image from camera or gallery without creating a
 4. File Provider
 5. Custom Picker Dialog 
 6. Dialog animations
-
+7.Open File picker
 
 ## Screenshots
 <img src='screenshots/permissions.gif' height=480  width=240/> <img src='screenshots/take_picture.gif' height=480  width=240/>
@@ -35,7 +35,7 @@ allprojects {
 ### implementation
 Just add it to your dependencies
 ```
- implementation 'com.github.MuhammadTouseeq:EasyImagePicker:v1.0.0'
+ implementation 'com.github.MuhammadTouseeq:EasyImagePicker:v1.0.3'
 ```
 ### For Dexture (Optional)
 
