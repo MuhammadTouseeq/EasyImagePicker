@@ -78,6 +78,19 @@ EasyImagePicker.getInstance().withContext(this, BuildConfig.APPLICATION_ID).open
   EasyImagePicker.getInstance().withContext(this, BuildConfig.APPLICATION_ID).openGallery();
 ```
 
+### Add in Android manifest 
+
+```
+ <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_path" />
+        </provider>
+```
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
